@@ -19,9 +19,13 @@
 	},
 	"homepage": "https://github.com/KobloshAlex/dev-api-v2#readme",
 	"dependencies": {
+		"colors": "^1.4.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
-		"log4js": "^6.3.0"
+		"log4js": "^6.3.0",
+		"mongoose": "^5.11.8",
+		"morgan": "^1.10.0",
+		"winston": "^3.3.3"
 	},
 	"devDependencies": {
 		"eslint": "^7.15.0",
