@@ -16,7 +16,10 @@ const bootcampsRoutes = require("./routes/bootcampsRoutes");
 
 const app = express();
 
-//load logger
+// Body parser
+app.use(express.json());
+
+// load morgan
 if (process.env.NODE_ENV === "development") {
 	app.use(morgan("dev"));
 }
@@ -33,7 +36,7 @@ const server = app.listen(
 
 // Handle rejections
 
-process.on("uncaughtException", (err, promise) => {
+process.on("uncaughtException", (err) => {
 	log.error(`Error: ${err.message}`);
 
 	server.close(() => process.exit(1));
