@@ -1,7 +1,8 @@
 const fs = require("fs");
 const mongoose = require("mongoose");
-const colors = require("colors");
+require("colors");
 const dotenv = require("dotenv");
+const log = require("./utils/logger");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -21,20 +22,20 @@ const bootcamp = JSON.parse(
 const importData = async () => {
 	try {
 		await Bootcamp.create(bootcamp);
-		console.log("Data imported...".green);
+		log.info("Data imported...".green);
 		process.exit();
 	} catch (error) {
-		console.log(error);
+        log.error(error);
 	}
 };
 
 const deleteData = async () => {
 	try {
 		await Bootcamp.deleteMany();
-		console.log("Data deleted...".red);
+		log.info("Data deleted...".red);
 		process.exit();
 	} catch (error) {
-		console.log(error);
+		log.error(error);
 	}
 };
 
