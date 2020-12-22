@@ -25,6 +25,7 @@
 		"log4js": "^6.3.0",
 		"mongoose": "^5.11.8",
 		"morgan": "^1.10.0",
+		"slugify": "^1.4.6",
 		"winston": "^3.3.3"
 	},
 	"devDependencies": {
