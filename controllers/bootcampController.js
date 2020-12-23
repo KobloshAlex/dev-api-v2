@@ -26,80 +26,9 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/bootcamps
 // @access Public
 exports.getAllBootcamps = asyncHandler(async (req, res, next) => {
-	let query;
+	
 
-	// Copy req.query
-	const reqQuery = { ...req.query };
-
-	// Field to exclude
-	const removeField = ["select", "sort", "page", "limit"];
-
-	// Loop over removeField and delete them from reqQuery
-	removeField.forEach((param) => delete reqQuery[param]);
-
-	// Create query string
-	let queryStr = JSON.stringify(reqQuery);
-
-	// http://url?fieldName[Advance filtering abbreviation]
-	// Advance filtering abbreviation
-	// gt - greater than
-	// gte - greater than or equal
-	// lt - less than
-	// lte - less than or equal
-	// in - in range (exact)
-	queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)/g, (match) => `$${match}`);
-
-	query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
-
-	// Select fields
-	let fieldsToDisplay;
-	if (req.query.select) {
-		fieldsToDisplay = req.query.select.split(",").join(" ");
-		query = query.select(fieldsToDisplay);
-	}
-
-	// Sort by field (ASC)
-	if (req.query.sort) {
-		const sortBy = req.query.sort.split(",").join(" ");
-		query = query.sort(sortBy);
-	} else {
-		query = query.sort("-createdAt");
-	}
-
-	// Pagination
-	const page = parseInt(req.query.page, 10) || 1;
-	const limit = parseInt(req.query.limit, 10) || 5;
-	const startIndex = (page - 1) * limit;
-	const endIndex = page * limit;
-	const total = await Bootcamp.countDocuments();
-
-	query = query.skip(startIndex).limit(limit);
-
-	// Build Response
-	const bootcamps = await query;
-
-	const pagination = {};
-
-	if (endIndex < total) {
-		pagination.next = {
-			page: page + 1,
-			limit: limit,
-		};
-	}
-
-	if (startIndex > 0) {
-		pagination.prev = {
-			page: page - 1,
-			limit: limit,
-		};
-	}
-
-	res.status(200).json({
-		success: true,
-		count: bootcamps.length,
-		pagination: pagination,
-		data: bootcamps,
-	});
+	res.status(200).json(res.advancedResults);
 });
 
 // @desc create bootcamp
