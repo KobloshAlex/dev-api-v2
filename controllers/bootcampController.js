@@ -9,7 +9,7 @@ const log = require("../utils/logger");
 // @access Public
 exports.getBootcamp = asyncHandler(async (req, res, next) => {
 	const _id = req.params.id;
-	const bootcamp = await Bootcamp.findById(_id);
+	const bootcamp = await Bootcamp.findById(_id).populate("courses");
 
 	if (!bootcamp) {
 		log.error(`Bootcamp not found with id ${req.params.id}`);
@@ -146,9 +146,9 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 		return next(
 			new ErrorResponse(`Bootcamp not found with id ${req.params.id}`, 404)
 		);
-    }
-    
-    bootcamp.remove();
+	}
+
+	await bootcamp.remove();
 
 	res.status(200).json({ success: true });
 });
