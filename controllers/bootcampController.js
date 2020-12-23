@@ -12,6 +12,8 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 	const bootcamp = await Bootcamp.findById(_id);
 
 	if (!bootcamp) {
+		log.error(`Bootcamp not found with id ${req.params.id}`);
+
 		return next(
 			new ErrorResponse(`Bootcamp not found with id ${req.params.id}`, 404)
 		);
@@ -47,7 +49,7 @@ exports.getAllBootcamps = asyncHandler(async (req, res, next) => {
 	// in - in range (exact)
 	queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)/g, (match) => `$${match}`);
 
-	query = Bootcamp.find(JSON.parse(queryStr));
+	query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
 
 	// Select fields
 	let fieldsToDisplay;
@@ -123,6 +125,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 	});
 
 	if (!bootcamp) {
+		log.error(`Bootcamp not found with id ${req.params.id}`);
 		return next(
 			new ErrorResponse(`Bootcamp not found with id ${req.params.id}`, 404)
 		);
@@ -136,13 +139,16 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 	const _id = req.params.id;
-	const bootcamp = await Bootcamp.findByIdAndDelete(_id);
+	const bootcamp = await Bootcamp.findById(_id);
 
 	if (!bootcamp) {
+		log.error(`Bootcamp not found with id ${req.params.id}`);
 		return next(
 			new ErrorResponse(`Bootcamp not found with id ${req.params.id}`, 404)
 		);
-	}
+    }
+    
+    bootcamp.remove();
 
 	res.status(200).json({ success: true });
 });
@@ -168,6 +174,9 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 	console.log(radius);
 
 	if (bootcamps.length === 0) {
+		log.error(
+			"No bootcamps was found. Please expand the distance or try another zipcode"
+		);
 		return res.status(200).json({
 			success: true,
 			data:
