@@ -19,9 +19,12 @@
 	},
 	"homepage": "https://github.com/KobloshAlex/dev-api-v2#readme",
 	"dependencies": {
+		"bcrypt": "^5.0.0",
+		"bcryptjs": "^2.4.3",
 		"colors": "^1.4.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
 		"log4js": "^6.3.0",
 		"mongoose": "^5.11.8",
 		"morgan": "^1.10.0",
@@ -33,6 +36,6 @@
 		"@types/node": "^14.14.14",
 		"eslint": "^7.15.0",
 		"nodemon": "^2.0.6",
-		"prettier": "^2.2.1"
+		"prettier": "2.2.1"
 	}
 }
