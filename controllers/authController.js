@@ -41,21 +41,33 @@ exports.login = asyncHandler(async (req, res, next) => {
 	// Check if user exists
 	const user = await User.findOne({ email }).select("+password");
 	if (!user) {
-        log.error("user is not exist in db");
+		log.error("user is not exist in db");
 		return next(new ErrorResponse("Invalid credentials", 403));
-    }
-    
-    // Check if password exists
-    const isPassword = await user.matchPassword(password);
-    if(!isPassword) {
-        log.error("password is not exist in db");
+	}
+
+	// Check if password exists
+	const isPassword = await user.matchPassword(password);
+	if (!isPassword) {
+		log.error("password is not exist in db");
 		return next(new ErrorResponse("Invalid credentials", 403));
-    }
+	}
 
 	const token = user.getSignedJwtToken();
 
 	res.status(200).json({
 		success: true,
 		token,
+	});
+});
+
+// @desc Get user profile
+// @route GET /api/v1/auth/me
+// @access Private
+exports.getUserProfile = asyncHandler(async (req, res, next) => {
+	const user = await User.findById(req.user.id);
+
+	res.status(200).json({
+		success: true,
+		data: user,
 	});
 });
